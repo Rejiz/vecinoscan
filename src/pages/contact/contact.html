@@ -1,17 +1,17 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Contact
+      Sync
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-list-header>Follow us on Twitter</ion-list-header>
-    <ion-item>
-      <ion-icon name="ionic" item-start></ion-icon>
-      @ionicframework
-    </ion-item>
-  </ion-list>
+    <ion-list>
+        <ion-item *ngFor="let post of postList">
+          <h2>{{ post.title }}</h2>
+          <p>{{ post.body }}</p>
+          <button ion-button clear item-end><ion-icon name="checkmark-circle"></ion-icon></button>
+        </ion-item>
+      </ion-list>
 </ion-content>

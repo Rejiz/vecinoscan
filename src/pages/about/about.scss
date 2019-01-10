@@ -1,3 +1,34 @@
 page-about {
 
 }
+#close-scanner-button {
+    display: none;
+}
+
+html.qr-scanner-open {
+
+    ion-app,
+    ion-content {
+        height: 100% !important;
+        background-image: url('../assets/imgs/scan.png');
+        background-size: cover;
+    }
+    ion-tab,
+    ion-app,
+    ion-content {
+        --overflow: hidden !important;
+        background-color: transparent !important;
+        border-bottom: none;
+    }
+
+    ion-header,
+    ion-footer,
+    .tabbar,
+    .scroll-content > *:not(#close-scanner-button) {
+        display: none;
+    }
+
+    #close-scanner-button {
+        display: block;
+    }
+}

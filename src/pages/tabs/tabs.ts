@@ -16,4 +16,7 @@ export class TabsPage {
   constructor() {
 
   }
+  logout(){
+    // Remove API token 
+  }
 }
