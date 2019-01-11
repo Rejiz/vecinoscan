@@ -13,6 +13,7 @@ import 'rxjs/add/operator/catch';
 */
 //let apiUrl = "http://localhost/PHP-Slim-Restful/api/";
 let apiUrl = 'https://api.thewallscript.com/restful/';
+// let apiUrl = 'http://localhost:8888/PHP-Slim-Restful-master/api/';
 let getApiUrl = 'https://jsonplaceholder.typicode.com/posts';
 
 @Injectable()
@@ -20,7 +21,6 @@ let getApiUrl = 'https://jsonplaceholder.typicode.com/posts';
 export class AuthServiceProvider {
 
   constructor(public http: Http) {
-    console.log('Hello AuthServiceProvider Provider');
   }
   postData(credentials, type) {
     return new Promise((resolve, reject) => {

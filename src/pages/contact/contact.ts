@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ItemSliding, ToastController } from 'ionic-angular';
 import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 import { FeedUpdatesProvider } from '../../providers/feed-updates/feed-updates';
+import { Network } from '@ionic-native/network';
 
 @Component({
   selector: 'page-contact',
@@ -13,13 +14,10 @@ export class ContactPage {
 
   constructor(public navCtrl: NavController,
     public authService:AuthServiceProvider, 
-    public dataFu:FeedUpdatesProvider) {
-      this.getPosts();
+    public dataFu:FeedUpdatesProvider,
+    private toastCtrl: ToastController,
+    private network: Network) {
+    
   }
-
-  getPosts(){
-    this.authService.getPosts().subscribe((data)=>{
-        this.postList = data;
-    });
-  }
+  
 }

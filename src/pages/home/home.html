@@ -1,6 +1,9 @@
 <ion-header>
   <ion-navbar>
         <ion-buttons end>
+            <button ion-button icon-only (click)="refresh()">
+                <ion-icon name="ios-refresh"></ion-icon>
+            </button>
           <button ion-button icon-only (click)="logout()">
             <ion-icon name="ios-log-out"></ion-icon>
           </button>
@@ -16,20 +19,24 @@
   <h2>Welcome to VecinoScan!</h2>
   <h2>Welcome to {{userDetails.name}}</h2>
   <h3>Email: {{userDetails.email}}</h3>
-
-  <ion-item id="udpateBox">
-    <textarea #updatebox [(ngModel)]="userPostData.feed" autofocus></textarea>
-    <ion-row>
-      <button ion-button color="energy" (click)="feedUpdate()">Update</button>
-    </ion-row>
-  </ion-item>
   <ion-card *ngFor="let item of dataSet; let msgIndex = index">
     <ion-item>
       <ion-icon name="trash" item-right (click)="feedDelete(item.feed_id, msgIndex)"></ion-icon>
       <ion-card-content>
         <p [innerHTML]="item.feed | linky"></p>
+        <span>{{item.created | date: 'yyyy/M/d H:m:s a'}}</span>
+        
       </ion-card-content>
     </ion-item>
   </ion-card>
 
+  <ion-card *ngIf="noRecords">
+  <ion-item>
+    No Records
+    </ion-item>
+  </ion-card>
+
+  <ion-infinite-scroll (ionInfinite)="$event.waitFor(doInfinite())">
+      <ion-infinite-scroll-content loadingSpinner="dots" loadingText="Loading more data..."></ion-infinite-scroll-content>
+   </ion-infinite-scroll>
 </ion-content>

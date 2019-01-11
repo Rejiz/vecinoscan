@@ -1,3 +1,4 @@
+import { LoginPage } from './../login/login';
 import { Component, ViewChild } from '@angular/core';
 import { NavController, App, AlertController, NavParams } from 'ionic-angular';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
@@ -45,23 +46,19 @@ export class HomePage {
       this.noRecords = false;
       this.getFeed();
       this.localData = this.dataFu.paramData;
-      console.log(this.localData);
-      if(this.localData){
-        this.feedUp(this.localData);
-      }
-
   }
+  
   backToWelcome(){
-    const root = this.app.getRootNav();
-    root.popToRoot();
+    this.app.getRootNav().setRoot(LoginPage);
   }
   logout(){
     // Remove API token 
     localStorage.clear();
-    //this.goToAbout(undefined);
+    this.goToAbout(undefined);
     setTimeout(() => this.backToWelcome(), 1000);
   }
   //scans
+  
   getFeed() {
     this.common.presentLoading();
     this.authService.postData(this.userPostData, "feed").then(
@@ -115,7 +112,7 @@ export class HomePage {
       );
     }
   }
-  feedUp(texto){
+  feedUp(texto, fecha){
     this.userPostData = {
       user_id: "",
       token: "",
@@ -128,14 +125,17 @@ export class HomePage {
     this.userPostData.user_id = this.userDetails.user_id;
     this.userPostData.token = this.userDetails.token;
     this.userPostData.feed = this.dataFu.paramData;
-
+    //this.userPostData.lastCreated = fecha;
     if (this.userPostData.feed) {
+      this.common.presentLoading();
       this.authService.postData(this.userPostData, "feedUpdate").then(
         result => {
+          console.log(result);
           this.resposeData = result;
           if (this.resposeData.feedData) {
-            console.log(this.resposeData.feedData);
+            this.common.closeLoading();
             this.dataSet.unshift(this.resposeData.feedData);
+            this.userPostData.feed = "";
 
             //this.updatebox.setFocus();
             setTimeout(() => {
@@ -150,7 +150,8 @@ export class HomePage {
         }
       );
     }
-
+    this.dataFu.paramData = undefined;
+    this.dataFu.fechaData = undefined;
   }
   feedDelete(feed_id, msgIndex) {
     if (feed_id > 0) {
@@ -201,7 +202,7 @@ export class HomePage {
               this.userPostData.lastCreated = this.resposeData.feedData[
                 newData.length - 1
               ].created;
-
+              
               for (let i = 0; i < newData.length; i++) {
                 this.dataSet.push(newData[i]);
               }
@@ -222,12 +223,50 @@ export class HomePage {
     let a = new Date(time * 1000);
     return a;
   }
-  ionViewWillEnter(){
-    //this.feedUpdate();
+  ionViewDidEnter(){
+
+    if(this.dataFu.paramData && this.dataFu.fechaData){
+      this.feedUp(this.dataFu.paramData, this.dataFu.fechaData);
+    }
+  }
+  refresh(){
+    this.dataSet = [];
+    this.noRecords = false;
+    this.userPostData = {
+      user_id: "",
+      token: "",
+      feed: "",
+      feed_id: "",
+      lastCreated: ""
+    };
+    const data = JSON.parse(localStorage.getItem('userData'));
+    this.userDetails = data.userData;
+    this.userPostData.user_id = this.userDetails.user_id;
+    this.userPostData.token = this.userDetails.token;
+
+    this.authService.postData(this.userPostData, "feed").then(
+      result => {
+        console.log(result);
+        this.resposeData = result;
+        if (this.resposeData.feedData) {
+          this.dataSet = this.resposeData.feedData;
+          const dataLength = this.resposeData.feedData.length;
+          this.userPostData.lastCreated = this.resposeData.feedData[
+            dataLength - 1
+          ].created;
+        } else {
+          console.log("No access");
+        }
+      },
+      err => {
+        //Connection failed message
+      }
+    );
   }
   doRefresh(refresher) {
     console.log('Begin async operation', refresher);
     this.dataSet = [];
+    this.noRecords = false;
     //this.getFeed();
     this.userPostData = {
       user_id: "",
@@ -247,6 +286,10 @@ export class HomePage {
         this.resposeData = result;
         if (this.resposeData.feedData) {
           this.dataSet = this.resposeData.feedData;
+          const dataLength = this.resposeData.feedData.length;
+          this.userPostData.lastCreated = this.resposeData.feedData[
+            dataLength - 1
+          ].created;
         } else {
           console.log("No access");
         }

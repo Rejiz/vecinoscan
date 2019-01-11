@@ -19,6 +19,8 @@ import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 import { CommonProvider } from '../providers/common/common';
 import { LinkyModule } from 'angular-linky';
 import { FeedUpdatesProvider } from '../providers/feed-updates/feed-updates';
+import { Network } from '@ionic-native/network';
+import { NetworkstatusProvider } from '../providers/networkstatus/networkstatus';
 
 @NgModule({
   declarations: [
@@ -52,8 +54,10 @@ import { FeedUpdatesProvider } from '../providers/feed-updates/feed-updates';
     AuthServiceProvider,
     QRScanner,
     CommonProvider,
+    Network,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    FeedUpdatesProvider
+    FeedUpdatesProvider,
+    NetworkstatusProvider
   ]
 })
 export class AppModule {}

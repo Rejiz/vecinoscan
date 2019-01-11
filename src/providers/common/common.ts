@@ -13,7 +13,6 @@ export class CommonProvider {
   public loader: any;
 
   constructor(public http: HttpClient, public loadingCtrl: LoadingController) {
-    console.log('Hello CommonProvider Provider');
   }
   presentLoading(){
     this.loader = this.loadingCtrl.create({content: "Please wait ..."})

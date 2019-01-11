@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { IonicPage, NavController, NavParams, ToastController  } from 'ionic-angular';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
@@ -11,8 +12,9 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class FeedUpdatesProvider {
   public paramData: any;
-  constructor(public http: HttpClient) {
-    console.log('Hello FeedUpdatesProvider Provider');
+  public fechaData: any;
+  constructor( 
+    public http: HttpClient) {
   }
 
 }
