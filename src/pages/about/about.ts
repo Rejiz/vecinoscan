@@ -24,7 +24,15 @@ export class AboutPage {
     this.navCtrl.parent.select(tabNmb);
   }
   goToAbout(texto) {
-    this.dataFu.paramData = texto;
+    var month=new Array();
+    month[0]="Check 1";
+    month[1]="Check 2";
+    month[2]="Check 3";
+    month[3]="Check 4";
+    month[4]="Check 5";
+    month[5]="Check 6";
+    var id = month[texto];
+    this.dataFu.paramData = id;
     var month=new Array();
     month[0]="January";
     month[1]="February";
@@ -48,53 +56,33 @@ export class AboutPage {
     curr_date+ ' ' +
     mydate.getHours() + ':' +
     mydate.getMinutes() + ':' + 
-    mydate.getSeconds()
+    mydate.getSeconds();
 
     this.dataFu.fechaData = mydatestr;
-    this.switchTabs(0);
+    this.switchTabs(2);
     
   }
   //scans
   scan() {
-
-    //this.goToAbout('text');
-    // Optionally request the permission early
+    // this.goToAbout('2');
     this.qrScanner.prepare()
       .then((status: QRScannerStatus) => {
         if (status.authorized) {
-          // camera permission was granted
-
-          // start scanning
           let scanSub = this.qrScanner.scan().subscribe((text: string) => {
             this.qrScanner.hide(); // hide camera preview
             scanSub.unsubscribe(); // stop scanning
-            // hack to hide the app and show the preview
 
             this.qrScanner.resumePreview();
 
             this.closeScanner();
-            // ALERT TEXT
-            // let alert = this.alerCtrl.create({
-            //   title: text,
-            //   message: text,
-            //   buttons: ['Ok']
-            // });
-            // alert.present();
-
-            // UPDATE FEED ¬ RETURN TAB #3
             this.goToAbout(text);
           });
-          // show camera preview
           this.startScanner();
           this.qrScanner.show();
 
         } else if (status.denied) {
-          // camera permission was permanently denied
-          // you must use QRScanner.openSettings() method to guide the user to the settings page
-          // then they can grant the permission from there
           this.qrScanner.openSettings();
         } else {
-          // permission was denied, but not permanently. You can ask for permission again at a later time.
         }
       })
       .catch((e: any) => console.log('Error is', e));

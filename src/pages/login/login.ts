@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController  } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs';
 import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
-import { NetworkstatusProvider } from './../../providers/networkstatus/networkstatus';
+import { Network } from '@ionic-native/network';
 
 /**
  * Generated class for the LoginPage page.
@@ -25,9 +25,8 @@ export class LoginPage {
     public navParams: NavParams, 
     public authService: AuthServiceProvider, 
     private toastCtrl:ToastController,
-    public dataFu:NetworkstatusProvider) {
+    private network: Network) {
   }
-
   login(){
     if(this.userData.username && this.userData.password){
      this.authService.postData(this.userData, "login").then((result) =>{
@@ -36,27 +35,22 @@ export class LoginPage {
           localStorage.setItem('userData', JSON.stringify(this.resposeData) )
           this.navCtrl.push(TabsPage);
         }else{
-          this.presentToast("Please give valid username and password");
+          this.presentToast("Proporciona un Usuario o Contraseña validos.");
         }
      }, (err) => {
        //Connection failed message
      });
     }else{
-     this.presentToast("Give username and password");
+     this.presentToast("Ingresa Usuario y Contraseña.");
     }
+    
   }
    presentToast(msg) {
      let toast = this.toastCtrl.create({
        message: msg,
-       duration: 2000
+       duration: 5000
      });
      toast.present();
    }
 
-  ionViewDidEnter() {
-    this.dataFu.checkNetwork();
-  }
-  ionViewWillLeave(){
-    this.dataFu.leaveNetwork();
-  }
 }

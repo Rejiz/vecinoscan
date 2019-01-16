@@ -1,9 +1,6 @@
 <ion-header>
   <ion-navbar>
         <ion-buttons end>
-            <button ion-button icon-only (click)="refresh()">
-                <ion-icon name="ios-refresh"></ion-icon>
-            </button>
           <button ion-button icon-only (click)="logout()">
             <ion-icon name="ios-log-out"></ion-icon>
           </button>
@@ -12,31 +9,10 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-  <h2>Welcome to VecinoScan!</h2>
-  <h2>Welcome to {{userDetails.name}}</h2>
-  <h3>Email: {{userDetails.email}}</h3>
-  <ion-card *ngFor="let item of dataSet; let msgIndex = index">
-    <ion-item>
-      <ion-icon name="trash" item-right (click)="feedDelete(item.feed_id, msgIndex)"></ion-icon>
-      <ion-card-content>
-        <p [innerHTML]="item.feed | linky"></p>
-        <span>{{item.created | date: 'yyyy/M/d H:m:s a'}}</span>
-        
-      </ion-card-content>
-    </ion-item>
-  </ion-card>
-
-  <ion-card *ngIf="noRecords">
-  <ion-item>
-    No Records
-    </ion-item>
-  </ion-card>
-
-  <ion-infinite-scroll (ionInfinite)="$event.waitFor(doInfinite())">
-      <ion-infinite-scroll-content loadingSpinner="dots" loadingText="Loading more data..."></ion-infinite-scroll-content>
-   </ion-infinite-scroll>
+<ion-content padding text-center>
+  <h1>Hola! {{userDetails.name}}</h1>
+  <p>[ {{userDetails.email}} ]</p>
+  <ion-img width="150px" height="150px" src="../../assets/imgs/qrscan.png"></ion-img>
+  <h2 text-justify	>Bienvenido a VecinoApp Security, Para poder realizar el check de seguridad selecciona la opcion [SCAN] ubicada en el menu inferior. </h2>
+  <p text-justify	>Al realizar el escaneo del codigo se registrara de forma inmediata. en caso de perder la conexion a internet, el registro quedara pendiente, en el momento en que exista red disponible, se habilitara una opcion para reenviar el registro.</p>
 </ion-content>

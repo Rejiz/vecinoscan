@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Http, Headers, Response } from '@angular/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -14,7 +13,6 @@ import 'rxjs/add/operator/catch';
 //let apiUrl = "http://localhost/PHP-Slim-Restful/api/";
 let apiUrl = 'https://api.thewallscript.com/restful/';
 // let apiUrl = 'http://localhost:8888/PHP-Slim-Restful-master/api/';
-let getApiUrl = 'https://jsonplaceholder.typicode.com/posts';
 
 @Injectable()
 
@@ -36,22 +34,4 @@ export class AuthServiceProvider {
 
   }
 
-  // getPosts() {
-
-  //   return  this.http.get(getApiUrl)
-  //           .do((res : Response ) => console.log(res.json()))
-  //           .map((res : Response ) => res.json())
-  //           .catch((error:any) => {
-  //             return Observable.throw(error);
-  //           })
-  // }
-  //private getPosts(): Observable<any> {
-  getPosts(): Observable<any> {
-    console.log(document.location.href);
-    return this.http.get(getApiUrl)
-      .map((res:any)=> res.json())
-      .catch((error:any) => {
-        return Observable.throw(error);
-      })
-  }
 }

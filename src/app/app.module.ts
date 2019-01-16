@@ -21,6 +21,7 @@ import { LinkyModule } from 'angular-linky';
 import { FeedUpdatesProvider } from '../providers/feed-updates/feed-updates';
 import { Network } from '@ionic-native/network';
 import { NetworkstatusProvider } from '../providers/networkstatus/networkstatus';
+import { DatabaseProvider } from '../providers/database/database';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { NetworkstatusProvider } from '../providers/networkstatus/networkstatus'
     Network,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FeedUpdatesProvider,
-    NetworkstatusProvider
+    NetworkstatusProvider,
+    DatabaseProvider
   ]
 })
 export class AppModule {}

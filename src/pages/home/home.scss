@@ -1,34 +1,13 @@
 page-home {
 
-}
-#close-scanner-button {
-    display: none;
-}
-
-html.qr-scanner-open {
-
-    ion-app,
-    ion-content {
-        height: 100% !important;
-        background-image: url('../assets/imgs/scan.png');
-        background-size: cover;
+    h1{
+        text-align: center;
+        color: #554E8F;
+        font-size: 22px;
     }
-    ion-tab,
-    ion-app,
-    ion-content {
-        --overflow: hidden !important;
-        background-color: transparent !important;
-        border-bottom: none;
-    }
-
-    ion-header,
-    ion-footer,
-    .tabbar,
-    .scroll-content > *:not(#close-scanner-button) {
-        display: none;
-    }
-
-    #close-scanner-button {
-        display: block;
+    h2, p{
+        text-align: center;
+        color: #82A0B7;
+        font-size: 16px;
     }
 }

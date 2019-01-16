@@ -18,7 +18,6 @@ export class HomePage {
   public resposeData : any;
   public dataSet : any;
   public noRecords: boolean;
-  
   userPostData = {
     user_id: "",
     token: "",
@@ -44,10 +43,7 @@ export class HomePage {
       this.userPostData.token = this.userDetails.token;
       this.userPostData.lastCreated = "";
       this.noRecords = false;
-      this.getFeed();
-      this.localData = this.dataFu.paramData;
   }
-  
   backToWelcome(){
     this.app.getRootNav().setRoot(LoginPage);
   }
@@ -71,6 +67,7 @@ export class HomePage {
           this.userPostData.lastCreated = this.resposeData.feedData[
             dataLength - 1
           ].created;
+          console.log(this.dataSet);
         } else {
           console.log("No access");
         }
@@ -222,12 +219,6 @@ export class HomePage {
   converTime(time) {
     let a = new Date(time * 1000);
     return a;
-  }
-  ionViewDidEnter(){
-
-    if(this.dataFu.paramData && this.dataFu.fechaData){
-      this.feedUp(this.dataFu.paramData, this.dataFu.fechaData);
-    }
   }
   refresh(){
     this.dataSet = [];
