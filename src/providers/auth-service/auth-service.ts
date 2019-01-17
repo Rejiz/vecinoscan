@@ -1,35 +1,61 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Http, Headers, Response } from '@angular/http';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import { HTTP } from '@ionic-native/http';
+
 /*
   Generated class for the AuthServiceProvider provider.
 
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
-//let apiUrl = "http://localhost/PHP-Slim-Restful/api/";
-let apiUrl = 'https://api.thewallscript.com/restful/';
+let apiUrl = 'http://api.penascotoday.com/api/';
+// let apiUrl = 'https://api.thewallscript.com/restful/';
 // let apiUrl = 'http://localhost:8888/PHP-Slim-Restful-master/api/';
 
 @Injectable()
 
 export class AuthServiceProvider {
 
-  constructor(public http: Http) {
+  constructor(private http: HTTP) {
   }
   postData(credentials, type) {
     return new Promise((resolve, reject) => {
-      let headers = new Headers();
+      // let headers 	: any		= new HttpHeaders({ 'Content-Type': 'application/json' });
+      // let headers = new Headers();
+      let headers = new Headers({'Content-Type': 'application/json'});
 
-      this.http.post(apiUrl + type, JSON.stringify(credentials), {headers: headers})
-        .subscribe(res => {
-          resolve(res.json());
+      this.http.post(apiUrl + type, JSON.stringify(credentials), headers)
+        .then(res => {
+          resolve(res);
+          console.log(res);
         }, (err) => {
+          console.log(err);
           reject(err);
         });
+
+        // this.http.post(apiUrl + type, JSON.stringify(credentials), {headers: headers})
+        // .then(data => {
+
+        //   resolve(data);
+        //   console.log(data);
+        //   console.log(data.status);
+        //   console.log(data.data); // data received by server
+        //   console.log(data.headers);
+
+        // })
+        // .catch(error => {
+
+        //   reject(error);
+        //   console.log(error);
+        //   console.log(error.status);
+        //   console.log(error.error); // error message as string
+        //   console.log(error.headers);
+
+        // });
     });
 
   }

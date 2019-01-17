@@ -6,6 +6,7 @@ import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 import { CommonProvider } from "../../providers/common/common";
 import { Events } from 'ionic-angular';
 import { FeedUpdatesProvider } from '../../providers/feed-updates/feed-updates';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'page-home',
@@ -25,6 +26,7 @@ export class HomePage {
     feed_id: "",
     lastCreated: ""
   };
+  public items : Array<any> = [];
   constructor(
     public navCtrl: NavController,
     private qrScanner: QRScanner,
@@ -34,9 +36,10 @@ export class HomePage {
     public authService:AuthServiceProvider,
     public navParams: NavParams,
     public events: Events, 
-    public dataFu:FeedUpdatesProvider
-    ) {
+    public dataFu:FeedUpdatesProvider,
+    public http   : HttpClient) {
 
+      this.getScans();
       const data = JSON.parse(localStorage.getItem('userData'));
       this.userDetails = data.userData;
       this.userPostData.user_id = this.userDetails.user_id;
@@ -44,17 +47,30 @@ export class HomePage {
       this.userPostData.lastCreated = "";
       this.noRecords = false;
   }
+  // OBTENER INFORMACION DESDE MYSQL
+  getScans() {
+    this.http
+    .get('http://api.penascotoday.com/api/getScans')
+    .subscribe((data : any) =>
+    {
+       this.items = data;
+       localStorage.setItem('getScans', JSON.stringify(this.items) )
+    },
+    (error : any) =>
+    {
+       console.dir(error);
+    });
+  }
   backToWelcome(){
     this.app.getRootNav().setRoot(LoginPage);
   }
   logout(){
     // Remove API token 
-    localStorage.clear();
+    localStorage.removeItem('userData');
     this.goToAbout(undefined);
     setTimeout(() => this.backToWelcome(), 1000);
   }
   //scans
-  
   getFeed() {
     this.common.presentLoading();
     this.authService.postData(this.userPostData, "feed").then(

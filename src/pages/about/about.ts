@@ -5,34 +5,38 @@ import { AlertController } from 'ionic-angular';
 import { HomePage } from "../home/home";
 import { Events } from 'ionic-angular';
 import { FeedUpdatesProvider } from '../../providers/feed-updates/feed-updates';
+import { Storage } from '@ionic/storage';
+
+
 
 @Component({
   selector: 'page-about',
   templateUrl: 'about.html'
 })
 export class AboutPage {
+  public items : Array<any> = [];
   constructor(public navCtrl: NavController,
     private qrScanner: QRScanner,
     public alerCtrl: AlertController,
     public app: App,
     public events: Events, 
-    public dataFu:FeedUpdatesProvider) {
-
+    public dataFu:FeedUpdatesProvider,
+    public storage: Storage) {
 
   }
   switchTabs(tabNmb) {
     this.navCtrl.parent.select(tabNmb);
   }
+
   goToAbout(texto) {
-    var month=new Array();
-    month[0]="Check 1";
-    month[1]="Check 2";
-    month[2]="Check 3";
-    month[3]="Check 4";
-    month[4]="Check 5";
-    month[5]="Check 6";
-    var id = month[texto];
-    this.dataFu.paramData = id;
+
+    var gScans = JSON.parse(localStorage.getItem('getScans'));
+    var item73 = gScans.filter(function(item) {
+      return item.id === texto;
+    })[0];
+
+
+    this.dataFu.paramData = item73['name'];
     var month=new Array();
     month[0]="January";
     month[1]="February";

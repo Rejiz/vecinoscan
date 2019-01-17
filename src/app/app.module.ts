@@ -22,6 +22,10 @@ import { FeedUpdatesProvider } from '../providers/feed-updates/feed-updates';
 import { Network } from '@ionic-native/network';
 import { NetworkstatusProvider } from '../providers/networkstatus/networkstatus';
 import { DatabaseProvider } from '../providers/database/database';
+import { IonicStorageModule } from '@ionic/storage';
+import { filter } from 'rxjs/operators';
+import { HTTP } from '@ionic-native/http';
+
 
 @NgModule({
   declarations: [
@@ -38,6 +42,10 @@ import { DatabaseProvider } from '../providers/database/database';
     HttpModule,
     HttpClientModule,
     FormsModule,
+    IonicStorageModule.forRoot({
+      name: '__mydb',
+         driverOrder: ['indexeddb', 'sqlite', 'websql']
+    }),
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -56,6 +64,7 @@ import { DatabaseProvider } from '../providers/database/database';
     QRScanner,
     CommonProvider,
     Network,
+    HTTP,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FeedUpdatesProvider,
     NetworkstatusProvider,

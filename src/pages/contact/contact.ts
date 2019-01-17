@@ -6,7 +6,6 @@ import { Network } from '@ionic-native/network';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
 import { DatabaseProvider } from '../../providers/database/database';
-
 import { CommonProvider } from "../../providers/common/common";
 
 @Component({
@@ -15,6 +14,7 @@ import { CommonProvider } from "../../providers/common/common";
 })
 export class ContactPage {
   
+  public items : Array<any> = [];
   public hide:boolean = false;
   public hideForm        : boolean = false;
   public showOn        : boolean = false;
@@ -254,7 +254,7 @@ export class ContactPage {
                 if(this.network.type != 'none'){
                   this.showOn  = true;
                 }
-                this.hasComics  = true;
+                  this.hasComics  = true;
                 this.comics   = data;
                 this.dataFu.paramData = undefined;
                 this.dataFu.fechaData = undefined;
