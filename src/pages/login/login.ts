@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController  } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs';
 import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
-import { Network } from '@ionic-native/network';
 
 /**
  * Generated class for the LoginPage page.
@@ -25,8 +24,7 @@ export class LoginPage {
     public navCtrl: NavController, 
     public navParams: NavParams, 
     public authService: AuthServiceProvider, 
-    private toastCtrl:ToastController,
-    private network: Network) {
+    private toastCtrl:ToastController) {
   }
   login(){
     if(this.userData.username && this.userData.password){

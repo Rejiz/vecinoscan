@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { NavController, ItemSliding, ToastController, AlertController } from 'ionic-angular';
+import { NavController, ToastController, AlertController } from 'ionic-angular';
 import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 import { FeedUpdatesProvider } from '../../providers/feed-updates/feed-updates';
 import { Network } from '@ionic-native/network';
@@ -53,8 +53,8 @@ export class ContactPage {
       }else{
       this.hide =true;
       }
-    var offline = Observable.fromEvent(document, "offline");
-    var online = Observable.fromEvent(document, "online");
+      var offline = Observable.fromEvent(document, "offline");
+      var online = Observable.fromEvent(document, "online");
 
     offline.subscribe(() => {
       this.zone.run(() => {
@@ -287,7 +287,8 @@ export class ContactPage {
   sendNotification(message)  : void{
      let notification = this.toastCtrl.create({
             message    : message,
-            duration     : 6000
+            duration     : 3000,
+            position: 'top'
        });
      notification.present();
   }

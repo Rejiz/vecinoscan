@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, App } from 'ionic-angular';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 import { AlertController } from 'ionic-angular';
-import { HomePage } from "../home/home";
 import { Events } from 'ionic-angular';
 import { FeedUpdatesProvider } from '../../providers/feed-updates/feed-updates';
 import { Storage } from '@ionic/storage';

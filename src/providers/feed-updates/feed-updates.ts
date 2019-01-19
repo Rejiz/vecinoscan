@@ -1,5 +1,4 @@
 import { HttpClient } from '@angular/common/http';
-import { IonicPage, NavController, NavParams, ToastController  } from 'ionic-angular';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
