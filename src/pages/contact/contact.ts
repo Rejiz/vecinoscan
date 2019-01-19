@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { NavController, ItemSliding, ToastController } from 'ionic-angular';
+import { NavController, ItemSliding, ToastController, AlertController } from 'ionic-angular';
 import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 import { FeedUpdatesProvider } from '../../providers/feed-updates/feed-updates';
 import { Network } from '@ionic-native/network';
@@ -7,6 +7,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
 import { DatabaseProvider } from '../../providers/database/database';
 import { CommonProvider } from "../../providers/common/common";
+import { Badge } from '@ionic-native/badge';
 
 @Component({
   selector: 'page-contact',
@@ -43,7 +44,9 @@ export class ContactPage {
     private network: Network,
     public DB : DatabaseProvider,
     public common : CommonProvider,
-    private zone: NgZone) {
+    private zone: NgZone,
+    private alertCtrl: AlertController,
+    private badge: Badge) {
 
       if(this.network.type != 'none'){
       this.hide =false;
@@ -68,17 +71,29 @@ export class ContactPage {
 
     });
   }
-  
+  presentAlert() {
+    this.dataFu.errorData = undefined;
+    let alert = this.alertCtrl.create({
+      title: 'Codigo Invalido',
+      subTitle: 'Capture un codigo valido',
+      buttons: ['Cerrar']
+    });
+    alert.present();
+
+  }
   //  FUNCIONES AL ENTRAR
   ionViewWillEnter(){
-    
+
     if(this.dataFu.paramData && this.dataFu.fechaData){
       this.saveComicUp(this.dataFu.paramData, this.dataFu.fechaData);
       if(this.network.type != 'none'){
         this.feedUp(this.dataFu.paramData, this.dataFu.fechaData);
       }
     }
-      this.displayComics();
+    this.displayComics();
+    if(this.dataFu.errorData == true){
+      this.presentAlert();
+    }
   }
   checkStatus(){
 
@@ -143,7 +158,7 @@ export class ContactPage {
     this.userPostData.user_id = this.userDetails.user_id;
     this.userPostData.token = this.userDetails.token;
     this.userPostData.feed = this.dataFu.paramData;
-    //this.userPostData.lastCreated = fecha;
+    this.userPostData.lastCreated = fecha;
     if (this.userPostData.feed) {
       this.authService.postData(this.userPostData, "feedUpdate").then(
         result => {
@@ -151,8 +166,6 @@ export class ContactPage {
           this.resposeData = result;
           if (this.resposeData.feedData) {
             // this.dataSet.unshift(this.resposeData.feedData);
-           this.hasComics  = false;
-           this.hasOnline  = true;
             this.userPostData.feed = "";
 
             //this.updatebox.setFocus();
@@ -218,7 +231,7 @@ export class ContactPage {
     {
        this.hideForm     = true;
        
-       this.sendNotification(`${character} was updated in your comic characters list`);
+       this.sendNotification(`${character} se registro con éxito!`);
        this.navCtrl.setRoot(this.navCtrl.getActive().component);
 
     });
@@ -241,21 +254,26 @@ export class ContactPage {
         .then((data) =>
         {
            this.sendNotification(`${character} se agrego tu registro`);
+            this.displayComics();
         });
   }
   // MOSTRAR INNFORMACIÓN LOCAL
   displayComics(){
       this.DB.retrieveComics().then((data)=>
      {
-        let existingData = Object.keys(data).length;
+        let existingData = Object.keys(data[0]).length;
+        console.log(existingData);
+        this.badge.set(data[1]);
         if(existingData !== 0)
         {
 
                 if(this.network.type != 'none'){
                   this.showOn  = true;
                 }
+                this.zone.run(() => {
                   this.hasComics  = true;
-                this.comics   = data;
+                });
+                this.comics   = data[0];
                 this.dataFu.paramData = undefined;
                 this.dataFu.fechaData = undefined;
         }
@@ -265,19 +283,11 @@ export class ContactPage {
         }
      });
   }
-  // AGREGAR INFORMACIÓN DESDE UN FORM
-  addCharacter(){
-     this.navCtrl.push('AddPage');
-  }
-  // EDIAR INFORMACION DESDE UN FORM
-  viewCharacter(param){
-     this.navCtrl.push('AddPage', param);
-  }
   // CALLBACK NOTIFICACIONES
   sendNotification(message)  : void{
      let notification = this.toastCtrl.create({
             message    : message,
-            duration     : 3000
+            duration     : 6000
        });
      notification.present();
   }
@@ -287,5 +297,9 @@ export class ContactPage {
       message: `You are now ${connectionState} via ${networkType}`,
       duration: 3000
     }).present();
+  }
+  updatePage(){
+    this.navCtrl.setRoot(this.navCtrl.getActive().component);
+    this.dataFu.updateData = undefined;
   }
 }

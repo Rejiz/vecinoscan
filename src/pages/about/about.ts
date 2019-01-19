@@ -15,7 +15,8 @@ import { Storage } from '@ionic/storage';
 })
 export class AboutPage {
   public items : Array<any> = [];
-  constructor(public navCtrl: NavController,
+  constructor(
+    public navCtrl: NavController,
     private qrScanner: QRScanner,
     public alerCtrl: AlertController,
     public app: App,
@@ -24,19 +25,18 @@ export class AboutPage {
     public storage: Storage) {
 
   }
+  //Funcion de switcheo
   switchTabs(tabNmb) {
     this.navCtrl.parent.select(tabNmb);
   }
-
+  // Captura de dato QR y Fecha
   goToAbout(texto) {
 
     var gScans = JSON.parse(localStorage.getItem('getScans'));
-    var item73 = gScans.filter(function(item) {
+    var gScansval = gScans.filter(function(item) {
       return item.id === texto;
     })[0];
 
-
-    this.dataFu.paramData = item73['name'];
     var month=new Array();
     month[0]="January";
     month[1]="February";
@@ -62,11 +62,18 @@ export class AboutPage {
     mydate.getMinutes() + ':' + 
     mydate.getSeconds();
 
+    if(gScansval != undefined){
+      this.dataFu.paramData = gScansval['name'];
+    }else{
+      this.dataFu.errorData = true;
+    }
+    
     this.dataFu.fechaData = mydatestr;
+    this.dataFu.updateData = true;
     this.switchTabs(2);
     
   }
-  //scans
+  //FUNCION PARA ABRIR ESCANER
   scan() {
     // this.goToAbout('2');
     this.qrScanner.prepare()
@@ -81,7 +88,6 @@ export class AboutPage {
             this.closeScanner();
             this.goToAbout(text);
           });
-          this.startScanner();
           this.qrScanner.show();
 
         } else if (status.denied) {
@@ -103,13 +109,11 @@ export class AboutPage {
     const rootElement = <HTMLElement>document.getElementsByTagName('html')[0];
     rootElement.classList.remove('qr-scanner-open');
     // start scanning
-    let scanSub = this.qrScanner.scan().subscribe((text: string) => {
-      this.qrScanner.hide(); // hide camera preview
-      scanSub.unsubscribe(); // stop scanning
-    });
+    this.qrScanner.hide(); // hide camera preview
     this.switchTabs(0);
   };
   ionViewWillEnter(){
+    this.startScanner();
     this.scan();
   }
 }

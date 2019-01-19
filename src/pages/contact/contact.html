@@ -1,7 +1,12 @@
 <ion-header>
   <ion-navbar>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="updatePage()">
+        <ion-icon name="md-refresh"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title>
-      Sync
+      Registros
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -13,7 +18,7 @@
         <ion-list>
   
            <ion-item *ngFor="let comic of comics" class="scans" [ngClass]="comic.active == true?'true':'false'">
-            <ion-icon *ngIf=" comic.active == true" item-start name="ios-checkmark-circle-outline" color="secondary"></ion-icon>
+            <ion-icon *ngIf=" comic.active == true" item-start name="ios-checkmark-circle" color="secondary"></ion-icon>
             <ion-icon *ngIf=" comic.active == false" item-start name="ios-close-circle" color="danger"></ion-icon>
               <h2>{{ comic.character }} </h2>
               <p>{{ comic.rating }}</p>

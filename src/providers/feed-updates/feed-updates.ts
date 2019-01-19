@@ -13,6 +13,8 @@ import 'rxjs/add/operator/map';
 export class FeedUpdatesProvider {
   public paramData: any;
   public fechaData: any;
+  public updateData: any;
+  public errorData: any;
   constructor( 
     public http: HttpClient) {
   }

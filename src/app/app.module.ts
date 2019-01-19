@@ -25,6 +25,8 @@ import { DatabaseProvider } from '../providers/database/database';
 import { IonicStorageModule } from '@ionic/storage';
 import { filter } from 'rxjs/operators';
 import { HTTP } from '@ionic-native/http';
+import { HeaderColor } from '@ionic-native/header-color';
+import { Badge } from '@ionic-native/badge';
 
 
 @NgModule({
@@ -65,6 +67,8 @@ import { HTTP } from '@ionic-native/http';
     CommonProvider,
     Network,
     HTTP,
+    HeaderColor,
+    Badge,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FeedUpdatesProvider,
     NetworkstatusProvider,

@@ -21,7 +21,8 @@ export class LoginPage {
   resposeData : any;
   userData = {"username":"", "password":""};
 
-  constructor(public navCtrl: NavController, 
+  constructor(
+    public navCtrl: NavController, 
     public navParams: NavParams, 
     public authService: AuthServiceProvider, 
     private toastCtrl:ToastController,
@@ -29,28 +30,28 @@ export class LoginPage {
   }
   login(){
     if(this.userData.username && this.userData.password){
-     this.authService.postData(this.userData, "login").then((result) =>{
-      this.resposeData = result;
+      this.authService.postData(this.userData, "login").then((result) =>{
+        this.resposeData = result;
         if(this.resposeData.userData){
           localStorage.setItem('userData', JSON.stringify(this.resposeData) )
           this.navCtrl.push(TabsPage);
         }else{
           this.presentToast("Proporciona un Usuario o Contraseña validos.");
         }
-     }, (err) => {
-       //Connection failed message
-     });
+      }, (err) => {
+        //ERROR DE CONEXION
+      });
     }else{
      this.presentToast("Ingresa Usuario y Contraseña.");
     }
     
   }
-   presentToast(msg) {
-     let toast = this.toastCtrl.create({
-       message: msg,
-       duration: 5000
-     });
-     toast.present();
-   }
+  presentToast(msg) {
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 5000
+    });
+    toast.present();
+  }
 
 }

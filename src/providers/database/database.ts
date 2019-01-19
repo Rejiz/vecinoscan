@@ -19,7 +19,7 @@ import PouchFind from 'pouchdb-find';
 @Injectable()
 export class DatabaseProvider {
 
-
+   public hitDateMatchExists : any;
   private _DB     : any;
   private success : boolean = true;
 
@@ -123,36 +123,67 @@ export class DatabaseProvider {
   // GET ALL DATA
   retrieveComics()
   {
-
      return new Promise(resolve =>
      {
 
-PouchDB.plugin(PouchFind);
-        this._DB.allDocs({include_docs: true, descending: true, attachments: false}, function(err, doc)
-  {
-     let k,
-         items   = [],
-         row   = doc.rows;
+         PouchDB.plugin(PouchFind);
+         this._DB.allDocs({include_docs: true, descending: true, attachments: false}, function(err, doc)
+         {
+            let   k,
+                  items   = [],
+                  row   = doc.rows;
 
-     for(k in row)
-     {
-        var item            = row[k].doc;
+            for(k in row)
+            {
+               var item = row[k].doc;
+               items.push(
+               {
+                  id      :   item._id,
+                  rev     :   item._rev,
+                  character : item.character,
+                  active      : item.active,
+                  rating    : item.rating,
+               });
+            }
+            var month=new Array();
+            month[0]="January";
+            month[1]="February";
+            month[2]="March";
+            month[3]="April";
+            month[4]="May";
+            month[5]="June";
+            month[6]="July";
+            month[7]="August";
+            month[8]="September";
+            month[9]="October";
+            month[10]="November";
+            month[11]="December";
+            var mydate = new Date();
+            var curr_date = mydate.getDate();
+            var curr_month = month[mydate.getMonth()];
+            var curr_year = mydate.getFullYear();
+            
+            var mydatestr = '' + curr_year  + ' ' +
+            curr_month + ' ' + 
+            curr_date+ ' ' + '01:00:00';
+     
+            var inactive = false;
+            var resultInactive = items.filter(function (product) {
+               var date = product.active;
+               return (date === inactive);
+            });
 
-        items.push(
-        {
-           id      :   item._id,
-           rev     :   item._rev,
-           character : item.character,
-           active      : item.active,
-           rating    : item.rating,
-           //image     :   attachment
-        });
-     }
-           resolve(items);
-           console.log(items);
-        });
-     });
-  }
+            let existingData = Object.keys(resultInactive).length;
+            var startDate = new Date(mydatestr);
+
+            var resultProductData = items.filter(function (product) {
+               var date = new Date(product.id);
+               return (date >= startDate);
+            });
+           resolve([resultProductData, existingData]);
+         });
+      });
+   }
 
   // REMOVE DATA
   removeComic(id, rev)

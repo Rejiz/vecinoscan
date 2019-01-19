@@ -7,7 +7,7 @@
   "proxies": [
     {
       "path":"/api",
-      "proxyUrl": "https://penascotoday.com/api"
+      "proxyUrl": "https://api.penascotoday.com/api"
     }
   ]
 }

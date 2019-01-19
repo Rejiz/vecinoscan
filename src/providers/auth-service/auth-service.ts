@@ -12,7 +12,7 @@ import { HTTP } from '@ionic-native/http';
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
-let apiUrl = 'http://api.penascotoday.com/api/';
+let apiUrl = 'https://api.penascotoday.com/api/';
 // let apiUrl = 'https://api.thewallscript.com/restful/';
 // let apiUrl = 'http://localhost:8888/PHP-Slim-Restful-master/api/';
 
@@ -20,17 +20,19 @@ let apiUrl = 'http://api.penascotoday.com/api/';
 
 export class AuthServiceProvider {
 
-  constructor(private http: HTTP) {
+  constructor(private http: Http) {
   }
   postData(credentials, type) {
     return new Promise((resolve, reject) => {
       // let headers 	: any		= new HttpHeaders({ 'Content-Type': 'application/json' });
-      // let headers = new Headers();
-      let headers = new Headers({'Content-Type': 'application/json'});
+      // let headers = new Headers({'Accept': 'application/json', 'Content-Type': 'text/plain'});
+      var headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+      // let headers = new Headers({'Content-Type': 'application/json'});
 
-      this.http.post(apiUrl + type, JSON.stringify(credentials), headers)
-        .then(res => {
-          resolve(res);
+      this.http.post(apiUrl + type, JSON.stringify(credentials), { headers: headers })
+        .subscribe(res => {
+          resolve(res.json());
           console.log(res);
         }, (err) => {
           console.log(err);
