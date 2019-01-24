@@ -100,7 +100,8 @@ export class AddPage {
          rating    : string     = mydatestr,
          active    : boolean     = true,
          revision  : string     = this.revisionId,
-         id      : any        = this.recordId;
+         id      : any        = this.recordId,
+         idqr      : any        = '';
 
      if(this.recordId !== '')
      {
@@ -113,7 +114,7 @@ export class AddPage {
      }
      else
      {
-        this.DB.addComic(character, rating, active)
+        this.DB.addComic(character, rating, active, idqr)
         .then((data) =>
         {
            this.hideForm     = true;

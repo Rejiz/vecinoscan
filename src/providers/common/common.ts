@@ -15,11 +15,11 @@ export class CommonProvider {
   constructor(public http: HttpClient, public loadingCtrl: LoadingController) {
   }
   presentLoading(){
-    this.loader = this.loadingCtrl.create({content: "Please wait ..."})
+    this.loader = this.loadingCtrl.create({content: "Cargando contenido ..."})
    this.loader.present();
   }
  
   closeLoading(){
-   this.loader.dismiss();
+      this.loader.dismiss();
   }
 }

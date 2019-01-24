@@ -11,9 +11,11 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class FeedUpdatesProvider {
   public paramData: any;
+  public idQr: any;
   public fechaData: any;
   public updateData: any;
   public errorData: any;
+  public errorDatanet: any;
   constructor( 
     public http: HttpClient) {
   }

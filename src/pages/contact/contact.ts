@@ -22,18 +22,22 @@ export class ContactPage {
   public recordId        : any;
   public hasComics     : boolean = false;
   public hasOnline     : boolean = false;
+  public hasRecords     : boolean = false;
   public comics        : any;
+  public scans        : any;
   public revisionId    : any;
   public userDetails : any;
   public resposeData : any;
   public dataSet : any;
+  public noRecords: boolean;
 
   userPostData = {
     user_id: "",
     token: "",
     feed: "",
     feed_id: "",
-    lastCreated: ""
+    lastCreated: "",
+    idqr: ""
   };
   postList = [];
 
@@ -48,75 +52,80 @@ export class ContactPage {
     private alertCtrl: AlertController,
     private badge: Badge) {
 
-      if(this.network.type != 'none'){
-      this.hide =false;
-      }else{
-      this.hide =true;
-      }
-      var offline = Observable.fromEvent(document, "offline");
-      var online = Observable.fromEvent(document, "online");
+    var offline = Observable.fromEvent(document, "offline");
+    var online = Observable.fromEvent(document, "online");
 
     offline.subscribe(() => {
       this.zone.run(() => {
-        this.hide =true;
+        this.hide = true;
+        this.hasRecords = false;
       });
-      console.log('offline');
     });
 
     online.subscribe(()=>{
-      this.zone.run(() => {
-        this.hide =false;
-      });
-      console.log('online');
+      this.DB.retrieveComics().then((data)=>
+     {
+        let existingData = Object.keys(data[0]).length;
+        if(existingData !== 0)
+        {
+          this.zone.run(() => {
+            this.hide = false;
+            this.hasRecords = true;
+          });
+        }
+     });
 
     });
   }
-  presentAlert() {
+  //  ALERTAS EN CASO DE NO ENCONTRAR EL CODIGO QR (ONLINE-OFFLINE)
+  presentAlert(titulo, mensaje) {
     this.dataFu.errorData = undefined;
+    this.dataFu.errorDatanet = undefined;
     let alert = this.alertCtrl.create({
-      title: 'Codigo Invalido',
-      subTitle: 'Capture un codigo valido',
+      title: titulo,
+      subTitle: mensaje,
       buttons: ['Cerrar']
     });
     alert.present();
 
   }
-  //  FUNCIONES AL ENTRAR
+  //  FUNCIONES AL ENTRAR AL MENU REGISTROS
   ionViewWillEnter(){
-
-    if(this.dataFu.paramData && this.dataFu.fechaData){
-      this.saveComicUp(this.dataFu.paramData, this.dataFu.fechaData);
+    if(this.dataFu.paramData && this.dataFu.idQr && this.dataFu.fechaData){
       if(this.network.type != 'none'){
-        this.feedUp(this.dataFu.paramData, this.dataFu.fechaData);
+        this.feedUp(this.dataFu.paramData, this.dataFu.idQr, this.dataFu.fechaData);
+      }else{
+        this.saveComicUp(this.dataFu.paramData, this.dataFu.fechaData, this.dataFu.idQr);
       }
     }
-    this.displayComics();
+    if(this.network.type != 'none'){
+      this.getFeed();
+      this.displayComics();
+      this.hide = true;
+    }else{
+      this.displayComics();
+    }
+    
     if(this.dataFu.errorData == true){
-      this.presentAlert();
+      this.presentAlert('Codigo Invalido', 'Actualizar registro de ubicaciones.');
+    }else if(this.dataFu.errorDatanet == true){
+      this.presentAlert('Codigo no Encontrado', 'Intenta actualizar el registro de ubicaciones.');
     }
   }
-  checkStatus(){
-
-    this.network.onConnect().subscribe(data => {
-      this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      this.displayNetworkUpdate(data.type);
-    }, error => console.error(error));
-
-    this.network.onDisconnect().subscribe(data => {
-      this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      this.displayNetworkUpdate(data.type);
-    }, error => console.error(error));
-  }
-  // OBTENER INFORMACION DESDE MYSQL
+  // MUESTRA LOS REGISTROS DE LA BASE DE DATOS (ONLINE)
   getFeed() {
-    this.hasComics  = false;
-    this.hasOnline  = true;
+
+    this.zone.run(() => {
+      this.hide = true;
+      this.hasOnline  = true;
+    });
     this.userPostData = {
       user_id: "",
       token: "",
       feed: "",
       feed_id: "",
-      lastCreated: ""
+      lastCreated: "",
+      idqr: ""
     };
     const data = JSON.parse(localStorage.getItem('userData'));
     this.userDetails = data.userData;
@@ -134,8 +143,8 @@ export class ContactPage {
           this.userPostData.lastCreated = this.resposeData.feedData[
             dataLength - 1
           ].created;
-          console.log(this.dataSet);
         } else {
+          this.common.closeLoading();
           console.log("No access");
         }
       },
@@ -144,14 +153,15 @@ export class ContactPage {
       }
     );
   }
-  // ACTUALIZAR INFORMACION MYSQL
-  feedUp(texto, fecha){
+  // AGREGA REGISTRO DIRECTAMENTE ALA BASE DEDATOS (ONLINE)
+  feedUp(texto, idqr, fecha){
     this.userPostData = {
       user_id: "",
       token: "",
       feed: "",
       feed_id: "",
-      lastCreated: ""
+      lastCreated: "",
+      idqr: ""
     };
     const data = JSON.parse(localStorage.getItem('userData'));
     this.userDetails = data.userData;
@@ -159,13 +169,14 @@ export class ContactPage {
     this.userPostData.token = this.userDetails.token;
     this.userPostData.feed = this.dataFu.paramData;
     this.userPostData.lastCreated = fecha;
+    this.userPostData.idqr = idqr;
     if (this.userPostData.feed) {
+      console.log(this.userPostData);
       this.authService.postData(this.userPostData, "feedUpdate").then(
         result => {
-          console.log(result);
           this.resposeData = result;
           if (this.resposeData.feedData) {
-            // this.dataSet.unshift(this.resposeData.feedData);
+            this.dataSet.unshift(this.resposeData.feedData);
             this.userPostData.feed = "";
 
             //this.updatebox.setFocus();
@@ -183,15 +194,17 @@ export class ContactPage {
     }
     this.dataFu.paramData = undefined;
     this.dataFu.fechaData = undefined;
+    this.dataFu.idQr = undefined;
   }
-  // ACTUALIZAR INFORMACION MYSQL
-  feedUps(texto, fecha, activo, ide, rev){
+  // AGREGA REGISTROS PENDIENTES UNO POR UNO A LA BASE DE DATOS (ONLINE)
+  feedUps(texto, fecha, activo, ide, rev, idqri){
     this.userPostData = {
       user_id: "",
       token: "",
       feed: "",
       feed_id: "",
-      lastCreated: ""
+      lastCreated: "",
+      idqr: ""
     };
     const data = JSON.parse(localStorage.getItem('userData'));
     this.userDetails = data.userData;
@@ -199,10 +212,11 @@ export class ContactPage {
     this.userPostData.token = this.userDetails.token;
     this.userPostData.feed = texto;
     this.userPostData.lastCreated = fecha;
+    this.userPostData.idqr = idqri;
     if (this.userPostData.feed) {
+      console.log(this.userPostData);
       this.authService.postData(this.userPostData, "feedUpdate").then(
         result => {
-          console.log(result);
           this.resposeData = result;
           if (this.resposeData.feedData) {
             // this.dataSet.unshift(this.resposeData.feedData);
@@ -221,48 +235,93 @@ export class ContactPage {
         }
       );
     };
-    let character : string     = texto,
-    rating    : string     = fecha,
-    active    : boolean     = true,
-    revision  : string     = rev,
-    id      : any        = ide;
-    this.DB.updateComic(id, character, rating, active, revision)
+
+    this.DB.retrieveComic(ide)
+    .then((doc)=>
+    {
+       return this.DB.removeComic(ide, rev);
+    })
     .then((data) =>
     {
-       this.hideForm     = true;
-       
-       this.sendNotification(`${character} se registro con éxito!`);
-       this.navCtrl.setRoot(this.navCtrl.getActive().component);
-
+      this.navCtrl.setRoot(this.navCtrl.getActive().component);
+    })
+    .catch((err)=>
+    {
+       console.log(err);
+    });
+    
+    this.zone.run(() => {
+        this.hide = true;
     });
     this.dataFu.paramData = undefined;
     this.dataFu.fechaData = undefined;
+    this.dataFu.idQr = undefined;
   }
-  // ACTUAIZAR INFORMACION LOCAL
-  saveComicUp(texto, fecha){
-    if(this.network.type != 'none'){
-      var activo = true;
-    }else{
+  // AGREGA LOS REGISTROS PENDIENTES A LA BASE DE DATOS (ONLINE)
+  feedScans(texto, fecha, activo, ide, rev, idqri){
+    this.userPostData = {
+      user_id: "",
+      token: "",
+      feed: "",
+      feed_id: "",
+      lastCreated: "",
+      idqr: ""
+    };
+    const data = JSON.parse(localStorage.getItem('userData'));
+    this.userDetails = data.userData;
+    this.userPostData.user_id = this.userDetails.user_id;
+    this.userPostData.token = this.userDetails.token;
+    this.userPostData.feed = texto;
+    this.userPostData.lastCreated = fecha;
+    this.userPostData.idqr = idqri;
+    if (this.userPostData.feed) {
+      this.authService.postData(this.userPostData, "feedUpdate").then(
+        result => {
+          this.resposeData = result;
+          if (this.resposeData.feedData) {
+            // this.dataSet.unshift(this.resposeData.feedData);
+            this.userPostData.feed = "";
+
+            //this.updatebox.setFocus();
+            setTimeout(() => {
+              //  this.updatebox.focus();
+            }, 150);
+          } else {
+            console.log("No access");
+          }
+        },
+        err => {
+          //Connection failed message
+        }
+      );
+    };
+
+    this.dataFu.paramData = undefined;
+    this.dataFu.fechaData = undefined;
+    this.dataFu.idQr = undefined;
+  }
+  // AGREGA REGISTRO PENDIENTE (OFFLINE)
+  saveComicUp(texto, fecha, qride){
       var activo = false;
-    }
      let character : string     = texto,
          rating    : number     = fecha,
          active    : boolean     = activo,
-         id      : any        = this.recordId;
+         qrid    : number     = qride;
+         //id      : any        = this.recordId;
 
-        this.DB.addComic(character, rating, active)
+        this.DB.addComic(character, rating, active, qrid)
         .then((data) =>
         {
-           this.sendNotification(`${character} se agrego tu registro`);
+            this.sendNotification(`${character} se agrego tu registro`);
             this.displayComics();
         });
   }
-  // MOSTRAR INNFORMACIÓN LOCAL
+  // MUESTRA LOS REGISTROS EN BASE DE DATOS LOCAL (OFFLINE)
   displayComics(){
+
       this.DB.retrieveComics().then((data)=>
      {
         let existingData = Object.keys(data[0]).length;
-        console.log(existingData);
         this.badge.set(data[1]);
         if(existingData !== 0)
         {
@@ -272,33 +331,108 @@ export class ContactPage {
                 }
                 this.zone.run(() => {
                   this.hasComics  = true;
+                  if(this.network.type != 'none'){
+                    this.hide = false;
+                    this.hasRecords = true;
+                  }else{
+                    this.hasRecords = false;
+                    this.hide = true;
+                  }
                 });
                 this.comics   = data[0];
+                this.noRecords = false;
                 this.dataFu.paramData = undefined;
                 this.dataFu.fechaData = undefined;
         }
         else
         {
+
+          this.zone.run(() => {
+              this.hide = true;
+              this.hasRecords = false;
+          });
+          this.noRecords = true;
           console.log("we get nada!");
         }
      });
+  }
+  // BORRA REGISTROS LOCALS Y ACTUALIZA LA BASE DE DATOS.
+  displayScans(){
+      this.DB.retrieveScans().then((data)=>
+     {
+        let existingScans = Object.keys(data[2]).length;
+        if(existingScans !== 0)
+        {
+
+                this.scans   = data[2];
+                for (var index1 = 0; index1 < this.scans.length; index1++) {
+                  
+
+                  this.DB.retrieveComic(this.scans[index1]['id'])
+                  .then((doc)=>
+                  {
+                     return this.DB.removeComic(doc[0].id, doc[0].rev);
+                  })
+                  .then((data) =>
+                  {
+  
+                  })
+                  .catch((err)=>
+                  {
+                     console.log(err);
+                  });
+
+                  this.feedScans(this.scans[index1]['character'], this.scans[index1]['rating'], this.scans[index1]['active'], this.scans[index1]['id'], this.scans[index1]['rev'], this.scans[index1]['qrid']);
+
+                }
+
+          this.zone.run(() => {
+            this.hasComics = false;
+            this.noRecords = true;
+            this.hide = true;
+          });
+          this.getFeed();
+        }
+        else
+        {
+          console.log("we get nada!");
+        }
+
+
+     });
+  }
+  // CONFIRMACION DE ENVIO DE REGISTROS PENDIENTES (TODOS)
+  confirmScans() {
+    let alert = this.alertCtrl.create({
+      title: 'Enviar Registros?',
+      message: 'Se enviaran todos los registros pendientes.',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Enviar',
+          handler: () => {
+            this.displayScans();
+          }
+        }
+      ]
+    });
+    alert.present();
   }
   // CALLBACK NOTIFICACIONES
   sendNotification(message)  : void{
      let notification = this.toastCtrl.create({
             message    : message,
             duration     : 3000,
-            position: 'top'
+            position: 'bottom'
        });
      notification.present();
   }
-  displayNetworkUpdate(connectionState: string){
-    let networkType = this.network.type
-    this.toastCtrl.create({
-      message: `You are now ${connectionState} via ${networkType}`,
-      duration: 3000
-    }).present();
-  }
+  // FUNCION BOTON ACTUALIZAR VISTA
   updatePage(){
     this.navCtrl.setRoot(this.navCtrl.getActive().component);
     this.dataFu.updateData = undefined;

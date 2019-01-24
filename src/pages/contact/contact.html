@@ -4,6 +4,9 @@
       <button ion-button icon-only (click)="updatePage()">
         <ion-icon name="md-refresh"></ion-icon>
       </button>
+      <button ion-button icon-only (click)="confirmScans()" *ngIf="hide == false && hasRecords == true">
+        <ion-icon name="md-send"></ion-icon>
+      </button>
     </ion-buttons>
     <ion-title>
       Registros
@@ -14,17 +17,40 @@
 <ion-content padding>
      
 
+  <ion-card *ngIf="noRecords">
+    <ion-item>
+      No existen registros pendientes...
+    </ion-item>
+  </ion-card>
      <div *ngIf="hasComics">
         <ion-list>
   
+          <ion-list-header>
+            Registros Pendientes
+          </ion-list-header>
            <ion-item *ngFor="let comic of comics" class="scans" [ngClass]="comic.active == true?'true':'false'">
             <ion-icon *ngIf=" comic.active == true" item-start name="ios-checkmark-circle" color="secondary"></ion-icon>
             <ion-icon *ngIf=" comic.active == false" item-start name="ios-close-circle" color="danger"></ion-icon>
               <h2>{{ comic.character }} </h2>
               <p>{{ comic.rating }}</p>
-            <ion-icon *ngIf=" comic.active == false && hide == false" color="primary" item-end name="ios-send-outline" (click)="feedUps(comic.character, comic.rating, comic.active, comic.id, comic.rev)"></ion-icon>
+            <ion-icon *ngIf=" comic.active == false && hide == false" color="primary" item-end name="ios-send-outline" (click)="feedUps(comic.character, comic.rating, comic.active, comic.id, comic.rev, comic.qrid)"></ion-icon>
            </ion-item>
   
         </ion-list>
      </div>
+     
+     <div >
+      <ion-list *ngIf="hasOnline">
+
+        <ion-list-header>
+          Lista de Registros
+        </ion-list-header>
+         <ion-item *ngFor="let item of dataSet" class="scans true" >
+          <ion-icon item-start name="ios-checkmark-circle" color="secondary"></ion-icon>
+            <h2>{{ item.feed }} </h2>
+            <p>{{ item.created }}</p>
+         </ion-item>
+
+      </ion-list>
+   </div>
 </ion-content>
