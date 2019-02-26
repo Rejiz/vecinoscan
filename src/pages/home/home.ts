@@ -15,7 +15,9 @@ export class HomePage {
 
   public resposeData : any;
   userPostData = {
-    user_id: "",
+    "method" : "get_user_checks",
+    "user_id":"USER_ID",
+    "token":"TOKEN",
   };
 
   constructor(
@@ -31,14 +33,19 @@ export class HomePage {
   }
   getCheckpoints(){
     this.userPostData = {
-      user_id: "",
+      "method" : "get_user_checks",
+      "user_id":"",
+      "token":"",
     };
 
     const data = JSON.parse(localStorage.getItem('userData'));
     this.userDetails = data.userData;
-    this.userPostData.user_id = this.userDetails.user_id;
+    this.userPostData.user_id = '45';
+    this.userPostData.token = this.userDetails.token;
+    console.log(this.userPostData);
     this.authService.postData(this.userPostData, "getCheck").then(
       result => {
+        console.log(result);
         this.resposeData = result;
         localStorage.setItem('getScans', JSON.stringify(this.resposeData) )
       },

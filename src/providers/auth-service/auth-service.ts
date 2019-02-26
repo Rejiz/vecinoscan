@@ -10,7 +10,8 @@ import 'rxjs/add/operator/catch';
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
-let apiUrl = 'https://api.penascotoday.com/api/';
+// let apiUrl = 'https://api.penascotoday.com/api/';
+let apiUrl = 'https://www.vecinoapp.com/api/security/';
 // let apiUrl = 'https://api.thewallscript.com/restful/';
 // let apiUrl = 'http://localhost:8888/PHP-Slim-Restful-master/api/';
 
@@ -25,10 +26,10 @@ export class AuthServiceProvider {
       // let headers 	: any		= new HttpHeaders({ 'Content-Type': 'application/json' });
       // let headers = new Headers({'Accept': 'application/json', 'Content-Type': 'text/plain'});
       var headers = new Headers();
-        headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        headers.append('Content-Type', 'application/json; charset=UTF-8');
       // let headers = new Headers({'Content-Type': 'application/json'});
 
-      this.http.post(apiUrl + type, JSON.stringify(credentials), { headers: headers })
+      this.http.post(apiUrl, JSON.stringify(credentials), {  })
         .subscribe(res => {
           resolve(res.json());
         }, (err) => {

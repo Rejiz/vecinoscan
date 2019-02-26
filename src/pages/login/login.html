@@ -15,12 +15,12 @@
   <h2>Ingresa tus datos</h2>
   <ion-item id="rounded">
     <ion-label >  <ion-icon name="contact"></ion-icon> </ion-label>
-    <ion-input type="text" value="" [(ngModel)]="userData.username" placeholder="Usuario"></ion-input>
+    <ion-input type="text" value="developer.renem@gmail.com" [(ngModel)]="userData.username" placeholder="Usuario" ></ion-input>
   </ion-item>
 
   <ion-item id="rounded">
     <ion-label ><ion-icon name="key"></ion-icon> </ion-label>
-    <ion-input type="password" [(ngModel)]="userData.password" placeholder="************"></ion-input>
+    <ion-input type="password" value="sc2like91" [(ngModel)]="userData.password" placeholder="************"></ion-input>
   </ion-item>
 
   <button ion-button round outline color="loginboton" (click)="login()">Ingresar</button>

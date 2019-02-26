@@ -18,7 +18,7 @@ import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 export class LoginPage {
   
   resposeData : any;
-  userData = {"username":"", "password":""};
+  userData = {"method":"login","username":"", "password":""};
 
   constructor(
     public navCtrl: NavController, 
@@ -28,6 +28,7 @@ export class LoginPage {
   }
   login(){
     if(this.userData.username && this.userData.password){
+      console.log(this.userData);
       this.authService.postData(this.userData, "login").then((result) =>{
         this.resposeData = result;
         console.log(this.resposeData);

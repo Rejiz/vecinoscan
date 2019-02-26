@@ -32,12 +32,16 @@ export class ContactPage {
   public noRecords: boolean;
 
   userPostData = {
+    method: "",
     user_id: "",
     token: "",
     feed: "",
     feed_id: "",
     lastCreated: "",
     idqr: ""
+  };
+  qrPostData = {
+    user_id: ""
   };
   postList = [];
 
@@ -120,6 +124,7 @@ export class ContactPage {
       this.hasOnline  = true;
     });
     this.userPostData = {
+      method: "",
       user_id: "",
       token: "",
       feed: "",
@@ -132,9 +137,11 @@ export class ContactPage {
     this.userPostData.user_id = this.userDetails.user_id;
     this.userPostData.token = this.userDetails.token;
     this.userPostData.feed = this.dataFu.paramData;
+    this.userPostData.method = "get_user_checks";
     this.common.presentLoading();
     this.authService.postData(this.userPostData, "feed").then(
       result => {
+        console.log(result);
         this.resposeData = result;
         if (this.resposeData.feedData) {
           this.common.closeLoading();
@@ -156,6 +163,7 @@ export class ContactPage {
   // AGREGA REGISTRO DIRECTAMENTE ALA BASE DEDATOS (ONLINE)
   feedUp(texto, idqr, fecha){
     this.userPostData = {
+      method: "",
       user_id: "",
       token: "",
       feed: "",
@@ -199,6 +207,7 @@ export class ContactPage {
   // AGREGA REGISTROS PENDIENTES UNO POR UNO A LA BASE DE DATOS (ONLINE)
   feedUps(texto, fecha, activo, ide, rev, idqri){
     this.userPostData = {
+      method: "",
       user_id: "",
       token: "",
       feed: "",
@@ -260,6 +269,7 @@ export class ContactPage {
   // AGREGA LOS REGISTROS PENDIENTES A LA BASE DE DATOS (ONLINE)
   feedScans(texto, fecha, activo, ide, rev, idqri){
     this.userPostData = {
+      method: "",
       user_id: "",
       token: "",
       feed: "",
@@ -436,5 +446,24 @@ export class ContactPage {
   updatePage(){
     this.navCtrl.setRoot(this.navCtrl.getActive().component);
     this.dataFu.updateData = undefined;
+  }
+  getCheckpoints(){
+    this.qrPostData = {
+      user_id: "",
+    };
+
+    const data = JSON.parse(localStorage.getItem('userData'));
+    this.userDetails = data.userData;
+    this.qrPostData.user_id = this.userDetails.user_id;
+    this.authService.postData(this.qrPostData, "getCheck").then(
+      result => {
+        this.resposeData = result;
+        console.log(this.resposeData);
+        localStorage.setItem('getScans', JSON.stringify(this.resposeData) )
+      },
+      err => {
+        //Connection failed message
+      }
+    );
   }
 }

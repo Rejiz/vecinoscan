@@ -1,5 +1,10 @@
 <ion-header>
   <ion-navbar>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="getCheckpoints()">
+        <ion-icon name="pin"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-buttons end>
       <button ion-button icon-only (click)="updatePage()">
         <ion-icon name="md-refresh"></ion-icon>
