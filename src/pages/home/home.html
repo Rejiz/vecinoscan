@@ -5,14 +5,64 @@
             <ion-icon name="ios-log-out"></ion-icon>
           </button>
         </ion-buttons>
-        <ion-title>Bienvenido</ion-title>
+        <ion-title>Bienvenido - {{userDetails.name}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding text-center>
-  <h1>Hola! {{userDetails.name}}</h1>
-  <p>[ {{userDetails.email}} ]</p>
-  <ion-img width="150px" height="150px" src="../../assets/imgs/qrscan.png"></ion-img>
-  <h2 text-justify	>Bienvenido a VecinoApp Security, Para poder realizar el check de seguridad selecciona la opcion [SCAN] ubicada en el menu inferior. </h2>
-  <p text-justify	>Al realizar el escaneo del codigo se registrara de forma inmediata. en caso de perder la conexion a internet, el registro quedara pendiente, en el momento en que exista red disponible, se habilitara una opcion para reenviar el registro.</p>
+    <ion-slides pager="true">
+
+        <ion-slide>
+            <ion-row>
+              <ion-col>
+                <img src="../../assets/images/qr-code.png" width="180px"/>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <h1>Captura el Codigo</h1>
+              </ion-col>
+            </ion-row>
+        </ion-slide>
+      
+        <ion-slide>
+            <ion-row>
+              <ion-col>
+                <img src="../../assets/images/directions.png" />
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <h1>El registro se envia!</h1>
+              </ion-col>
+            </ion-row>
+        </ion-slide>
+      
+        <ion-slide>
+            <ion-row>
+              <ion-col>
+                <img src="../../assets/images/lock.png" />
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <h1>Si no cuentas con internet, el registro quedara pendiente</h1>
+              </ion-col>
+            </ion-row>
+        </ion-slide>
+      
+        <ion-slide>
+          <ion-row>
+            <ion-col>
+              <img src="../../assets/images/smartphone.png" />
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <h1>Al recuperar internet, enviar los registros pendientes.</h1>
+            </ion-col>
+          </ion-row>
+        </ion-slide>
+      
+      </ion-slides>
 </ion-content>

@@ -21,8 +21,10 @@ export class AboutPage {
 
   public userDetails : any;
   public resposeData : any;
-  userPostData = {
-    user_id: "",
+  getQR = {
+    "method" : "get_qr_codes",
+    "user_id":"",
+    "token":"",
   };
   constructor(
     public navCtrl: NavController,
@@ -45,18 +47,23 @@ export class AboutPage {
   }
 
   getCheckpoints(texto){
-    this.userPostData = {
-      user_id: "",
+    this.getQR = {
+      "method" : "get_qr_codes",
+      "user_id":"",
+      "token":"",
     };
 
     const data = JSON.parse(localStorage.getItem('userData'));
-    this.userDetails = data.userData;
-    this.userPostData.user_id = this.userDetails.user_id;
-    this.authService.postData(this.userPostData, "getCheck").then(
+    this.userDetails = data;
+    this.getQR.user_id = this.userDetails.user_id;
+    this.getQR.token = this.userDetails.token;
+    this.authService.postData(this.getQR, "getCheck").then(
       result => {
         this.resposeData = result;
-        localStorage.setItem('getScans', JSON.stringify(this.resposeData) )
-        this.goToAbout(texto);
+        if(this.resposeData.user_id != null){
+            localStorage.setItem('getScans', JSON.stringify(this.resposeData) );
+            this.goToAbout(texto);
+          }
       },
       err => {
         //Connection failed message
@@ -66,7 +73,7 @@ export class AboutPage {
   checkPoints(value){
 
     var gScans = JSON.parse(localStorage.getItem('getScans'));
-    var gScansval = gScans.filter(function(item) {
+    var gScansval = gScans.codes.filter(function(item) {
       return item.id === value;
     })[0];
     return gScansval;
@@ -78,32 +85,18 @@ export class AboutPage {
     //   return item.id === texto;
     // })[0];
     var lorem = this.checkPoints(texto);
-
-    var month=new Array();
-    month[0]="January";
-    month[1]="February";
-    month[2]="March";
-    month[3]="April";
-    month[4]="May";
-    month[5]="June";
-    month[6]="July";
-    month[7]="August";
-    month[8]="September";
-    month[9]="October";
-    month[10]="November";
-    month[11]="December";
+    
     var mydate = new Date();
     var curr_date = mydate.getDate();
-    var curr_month = month[mydate.getMonth()];
+    var curr_month = mydate.getMonth()+1;
     var curr_year = mydate.getFullYear();
     
-    var mydatestr = '' + curr_year  + ' ' +
-    curr_month + ' ' + 
+    var mydatestr = '' + curr_year  + '-' +
+    curr_month + '-' + 
     curr_date+ ' ' +
     mydate.getHours() + ':' +
     mydate.getMinutes() + ':' + 
     mydate.getSeconds();
-
     if(lorem != undefined){
       this.dataFu.paramData = lorem['name'];
       this.dataFu.idQr = lorem['id'];
@@ -165,7 +158,6 @@ export class AboutPage {
     const rootElement = <HTMLElement>document.getElementsByTagName('html')[0];
     rootElement.classList.add('qr-scanner-open');
   };
-
   closeScannerboton() {
     // Hide and unsubscribe from scanner
     const rootElement = <HTMLElement>document.getElementsByTagName('html')[0];
@@ -184,5 +176,6 @@ export class AboutPage {
   ionViewWillEnter(){
     this.startScanner();
     this.scan();
+    // this.getCheckpoints('1001');
   }
 }

@@ -41,9 +41,11 @@ $colors: (
   dark:       #222,
   transparent: transparent,
   loginboton: #5F87E7,
+  secondgrad: #7ea4ff,
 
 );
-$toolbar-background: color($colors, loginboton);
+$navbarQr: linear-gradient(90deg, color($colors, primary) 0%, color($colors, secondgrad) 100%);
+$toolbar-background: color($colors, secondary);
 $img-placeholder-background	: color($colors, transparent);
 // App iOS Variables
 // --------------------------------------------------

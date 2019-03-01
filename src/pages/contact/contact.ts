@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { NavController, ToastController, AlertController } from 'ionic-angular';
+import { App, NavController, ToastController, AlertController } from 'ionic-angular';
 import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 import { FeedUpdatesProvider } from '../../providers/feed-updates/feed-updates';
 import { Network } from '@ionic-native/network';
@@ -8,6 +8,7 @@ import 'rxjs/add/observable/fromEvent';
 import { DatabaseProvider } from '../../providers/database/database';
 import { CommonProvider } from "../../providers/common/common";
 import { Badge } from '@ionic-native/badge';
+import { LoginPage } from './../login/login';
 
 @Component({
   selector: 'page-contact',
@@ -37,15 +38,20 @@ export class ContactPage {
     token: "",
     feed: "",
     feed_id: "",
-    lastCreated: "",
-    idqr: ""
+    date: "",
+    idqr: "",
+    qr_code: ""
   };
   qrPostData = {
-    user_id: ""
+    method: "",
+    user_id: "",
+    token: "",
   };
   postList = [];
 
-  constructor(public navCtrl: NavController,
+  constructor(
+    public app: App,
+    public navCtrl: NavController,
     public authService:AuthServiceProvider, 
     public dataFu:FeedUpdatesProvider,
     private toastCtrl: ToastController,
@@ -129,11 +135,12 @@ export class ContactPage {
       token: "",
       feed: "",
       feed_id: "",
-      lastCreated: "",
-      idqr: ""
+      date: "",
+      idqr: "",
+      qr_code: ""
     };
     const data = JSON.parse(localStorage.getItem('userData'));
-    this.userDetails = data.userData;
+    this.userDetails = data;
     this.userPostData.user_id = this.userDetails.user_id;
     this.userPostData.token = this.userDetails.token;
     this.userPostData.feed = this.dataFu.paramData;
@@ -141,17 +148,19 @@ export class ContactPage {
     this.common.presentLoading();
     this.authService.postData(this.userPostData, "feed").then(
       result => {
-        console.log(result);
         this.resposeData = result;
-        if (this.resposeData.feedData) {
+        console.log(result);
+        if (this.resposeData.checks) {
           this.common.closeLoading();
-          this.dataSet = this.resposeData.feedData;
-          const dataLength = this.resposeData.feedData.length;
-          this.userPostData.lastCreated = this.resposeData.feedData[
+          this.dataSet = this.resposeData.checks;
+          const dataLength = this.resposeData.checks.length;
+          this.userPostData.date = this.resposeData.checks[
             dataLength - 1
           ].created;
         } else {
           this.common.closeLoading();
+          this.navCtrl.parent.select(0);
+
           console.log("No access");
         }
       },
@@ -168,23 +177,25 @@ export class ContactPage {
       token: "",
       feed: "",
       feed_id: "",
-      lastCreated: "",
-      idqr: ""
+      date: "",
+      idqr: "",
+      qr_code: ""
     };
     const data = JSON.parse(localStorage.getItem('userData'));
-    this.userDetails = data.userData;
+    this.userDetails = data;
     this.userPostData.user_id = this.userDetails.user_id;
     this.userPostData.token = this.userDetails.token;
-    this.userPostData.feed = this.dataFu.paramData;
-    this.userPostData.lastCreated = fecha;
+    this.userPostData.feed = texto;
+    this.userPostData.date = fecha;
     this.userPostData.idqr = idqr;
+    this.userPostData.qr_code = idqr;
+    this.userPostData.method = "post_check";
     if (this.userPostData.feed) {
-      console.log(this.userPostData);
       this.authService.postData(this.userPostData, "feedUpdate").then(
         result => {
           this.resposeData = result;
-          if (this.resposeData.feedData) {
-            this.dataSet.unshift(this.resposeData.feedData);
+          if (this.resposeData["feedData"]) {
+            this.dataSet.unshift(this.resposeData["feedData"]);
             this.userPostData.feed = "";
 
             //this.updatebox.setFocus();
@@ -212,22 +223,24 @@ export class ContactPage {
       token: "",
       feed: "",
       feed_id: "",
-      lastCreated: "",
-      idqr: ""
+      date: "",
+      idqr: "",
+      qr_code: ""
     };
     const data = JSON.parse(localStorage.getItem('userData'));
-    this.userDetails = data.userData;
+    this.userDetails = data;
     this.userPostData.user_id = this.userDetails.user_id;
     this.userPostData.token = this.userDetails.token;
     this.userPostData.feed = texto;
-    this.userPostData.lastCreated = fecha;
+    this.userPostData.date = fecha;
     this.userPostData.idqr = idqri;
+    this.userPostData.qr_code = idqri;
+    this.userPostData.method = "post_check";
     if (this.userPostData.feed) {
-      console.log(this.userPostData);
       this.authService.postData(this.userPostData, "feedUpdate").then(
         result => {
           this.resposeData = result;
-          if (this.resposeData.feedData) {
+          if (this.resposeData["feedData"]) {
             // this.dataSet.unshift(this.resposeData.feedData);
             this.userPostData.feed = "";
 
@@ -274,22 +287,25 @@ export class ContactPage {
       token: "",
       feed: "",
       feed_id: "",
-      lastCreated: "",
-      idqr: ""
+      date: "",
+      idqr: "",
+      qr_code: ""
     };
     const data = JSON.parse(localStorage.getItem('userData'));
-    this.userDetails = data.userData;
+    this.userDetails = data;
     this.userPostData.user_id = this.userDetails.user_id;
     this.userPostData.token = this.userDetails.token;
     this.userPostData.feed = texto;
-    this.userPostData.lastCreated = fecha;
+    this.userPostData.date = fecha;
     this.userPostData.idqr = idqri;
+    this.userPostData.qr_code = idqri;
+    this.userPostData.method = "post_check";
     if (this.userPostData.feed) {
       this.authService.postData(this.userPostData, "feedUpdate").then(
         result => {
           this.resposeData = result;
-          if (this.resposeData.feedData) {
-            // this.dataSet.unshift(this.resposeData.feedData);
+          if (this.resposeData["feedData"]) {
+            this.dataSet.unshift(this.resposeData["feedData"]);
             this.userPostData.feed = "";
 
             //this.updatebox.setFocus();
@@ -313,10 +329,10 @@ export class ContactPage {
   // AGREGA REGISTRO PENDIENTE (OFFLINE)
   saveComicUp(texto, fecha, qride){
       var activo = false;
-     let character : string     = texto,
-         rating    : number     = fecha,
-         active    : boolean     = activo,
-         qrid    : number     = qride;
+      let character : string     = texto,
+          rating    : number     = fecha,
+          active    : boolean     = activo,
+          qrid    : number     = qride;
          //id      : any        = this.recordId;
 
         this.DB.addComic(character, rating, active, qrid)
@@ -450,20 +466,42 @@ export class ContactPage {
   getCheckpoints(){
     this.qrPostData = {
       user_id: "",
+      method: "get_qr_codes",
+      token: "",
     };
-
     const data = JSON.parse(localStorage.getItem('userData'));
-    this.userDetails = data.userData;
+    this.userDetails = data;
     this.qrPostData.user_id = this.userDetails.user_id;
+    this.qrPostData.token = this.userDetails.token;
     this.authService.postData(this.qrPostData, "getCheck").then(
       result => {
         this.resposeData = result;
-        console.log(this.resposeData);
-        localStorage.setItem('getScans', JSON.stringify(this.resposeData) )
+        if(this.resposeData.user_id == null){
+          this.logout();
+          setTimeout(() => this.presentToast("Token invalido inicia sesion de nuevo."), 1000);
+        }else{
+          localStorage.setItem('getScans', JSON.stringify(this.resposeData) )
+          setTimeout(() => this.presentToast("Checkpoints actualizados con éxito."), 1000);
+        }
       },
       err => {
         //Connection failed message
       }
     );
+  }
+  backToWelcome(){
+    this.app.getRootNav().setRoot(LoginPage);
+  }
+  logout(){
+    // Remove API token 
+    localStorage.removeItem('userData');
+    setTimeout(() => this.backToWelcome(), 1000);
+  }
+  presentToast(msg) {
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 5000
+    });
+    toast.present();
   }
 }

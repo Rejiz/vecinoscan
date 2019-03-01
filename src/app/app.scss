@@ -27,4 +27,54 @@
   .tabs .tabbar {
     border-top: 0.55px solid rgba(0, 0, 0, 0.1);
     background: #fff;
+  }
+  ion-navbar, .toolbar-background{
+    background: $navbarQr;
+  }
+  ion-tabs a:nth-child(2){
+    color: #fff !important;
+    position: relative;
+  }
+  ion-tabs a:nth-child(2):before{
+    content:'';
+    position: absolute;
+    background: $navbarQr;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    top: -15px;
+    left:0;
+    right: 0;
+    margin: 0 auto;
+    z-index: 200;
+  }
+  ion-tabs a:nth-child(2) > .tab-button-icon,
+  ion-tabs a:nth-child(2) > .tab-button-text {
+    position: relative;
+    color: #fff !important;
+    top: -10px;
+    z-index: 201;
+  }
+  ion-tabs {
+    overflow: visible !important;
+  }
+  ion-tabs .tab-button {
+    overflow: unset !important;
+  }
+  .platform-android .tabs .tabbar,
+  ion-tabs .tabs .tabbar {
+    overflow: visible !important;
+    z-index: 999999 !important;
+  }
+  .tabbar{
+    z-index: 999999 !important;
+  }
+  .scroll-content{
+    z-index: 0 !important;
+  }
+  .fixed-content {
+    z-index: 0 !important;
+  }
+  .tabs-md .tab-button {
+    z-index: 9999;
 }
