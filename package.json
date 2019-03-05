@@ -14,8 +14,8 @@
     "@angular/animations": "5.2.11",
     "@angular/cli": "^6.2.8",
     "@angular/common": "5.2.11",
-    "@angular/compiler": "5.2.11",
-    "@angular/compiler-cli": "5.2.11",
+    "@angular/compiler": "^5.2.11",
+    "@angular/compiler-cli": "^5.2.11",
     "@angular/core": "5.2.11",
     "@angular/forms": "5.2.11",
     "@angular/http": "5.2.11",
@@ -30,6 +30,8 @@
     "@ionic-native/splash-screen": "~4.18.0",
     "@ionic-native/status-bar": "~4.18.0",
     "@ionic/storage": "2.2.0",
+    "@ngx-translate/core": "^9.1.1",
+    "@ngx-translate/http-loader": "^3.0.1",
     "angular-linky": "^1.2.2",
     "cordova-android": "7.1.4",
     "cordova-ios": "4.5.5",
@@ -51,13 +53,14 @@
     "ionicons": "3.0.0",
     "pouchdb": "^7.0.0",
     "pouchdb-find": "^7.0.0",
-    "rxjs": "5.5.11",
+    "rxjs": "^5.5.11",
+    "rxjs-compat": "^6.4.0",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.26"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "3.2.1",
-    "typescript": "~2.6.2"
+    "@ionic/app-scripts": "^3.2.1",
+    "typescript": "^2.6.2"
   },
   "description": "An Ionic project",
   "cordova": {

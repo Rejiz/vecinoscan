@@ -1,0 +1,22 @@
+{
+    "Scan QR Code" : "Escanea codigo QR",
+    "Sent Scan" : "El registro se envía después de escanear.",
+    "Pendding Scan" : "Si la red no esta disponible, el escan quedara pendiente",
+    "Avaliable Scan" : "Si la red  esta disponible, envia los scans pendientes.",
+    "welcome" : "Bienvenido",
+    "fill form" : "Correo electronico / Contraseña",
+    "user":"hello@vecinoapp.com",
+    "Ingresar":"Ingresar",
+    "error-login":"Proporciona un Correo electronico o Contraseña validos.",
+    "fields-login":"Ingresa Correo electronico y Contraseña.",
+    "language":"Lenguaje",
+    "spanish":"Español",
+    "english":"Inglés",
+    "cancel":"Cancelar",
+    "checklist":"Lista de Registros",
+    "not-pendding":"No hay registros pendientes...",
+    "pendding":"Registros Pendientes",
+    "Home":"Inicio",
+    "Scan":"Scan",
+    "Registros":"Registros"
+}

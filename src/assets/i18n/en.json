@@ -1,0 +1,24 @@
+{
+    
+    "Scan QR Code" : "Scan QR Code",
+    "Sent Scan" : "The record is sent after scanning.",
+    "Pendding Scan" : "If network is not available, the scan will remain pending.",
+    "Avaliable Scan" : "If network is available, send the pendding scans .",
+    "welcome" : "Welcome",
+    "fill form" : "Email / Password",
+    "user":"hello@vecinoapp.com",
+    "Ingresar":"Sign In",
+    "error-login":"Invalid Email or Password, try again.",
+    "fields-login":"Enter Email & Password",
+    "language":"Language",
+    "spanish":"Spanish",
+    "english":"English",
+    "cancel":"Cancel",
+    "close-scaner":"Close",
+    "checklist":"Checklist",
+    "not-pendding":"Not pendding checks...",
+    "pendding":"Pendding Checks",
+    "Home":"Home",
+    "Scan":"Scan",
+    "Registros":"Check List"
+}

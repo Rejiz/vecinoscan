@@ -8,7 +8,7 @@ page-contact {
          border-top: 0px solid #c8c7cc !important;
          box-shadow: 0px 4px 9px rgba(0, 0, 0, 0.15);
          margin-bottom: 10px;
-         border-radius: 5px;
+         border-radius: 25px;
      }
      .scans.true{
         border-left: 4px solid #32db64;
@@ -24,5 +24,14 @@ page-contact {
     }
     ion-label{
         overflow: initial !important;
+    }
+    .card-ios {
+        background: #fff;
+        border-radius: 25px
+    }
+    ion-list-header{
+        border-bottom: 0 solid #c8c7cc !important;
+        color: #fff !important;
+        background-color: transparent !important;
     }
 }

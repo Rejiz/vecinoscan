@@ -4,6 +4,7 @@ import { App, ToastController  } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 import {enableProdMode} from '@angular/core';
+import { Platform, ActionSheetController } from 'ionic-angular';
 
 enableProdMode();
 @Component({
@@ -11,6 +12,11 @@ enableProdMode();
   templateUrl: 'home.html'
 })
 export class HomePage {
+
+  public title : string;
+  public description : string;
+  public language : string;
+
   @ViewChild("updatebox") updatebox;
   public userDetails : any;
   public items : Array<any> = [];
@@ -27,7 +33,9 @@ export class HomePage {
     public app: App,
     public http: HttpClient,
     public authService:AuthServiceProvider, 
-    private toastCtrl:ToastController) {
+    private toastCtrl:ToastController,
+    public platform: Platform,
+    public actionSheetCtrl: ActionSheetController) {
 
       const data = JSON.parse(localStorage.getItem('userData'));
       this.userDetails = data;
@@ -35,6 +43,7 @@ export class HomePage {
   ionViewWillEnter(){
       this.getQrCodes();
   }
+
   getQrCodes(){
     this.getQR = {
       "method" : "get_qr_codes",
@@ -67,6 +76,8 @@ export class HomePage {
   logout(){
     // Remove API token 
     localStorage.removeItem('userData');
+    this.authService.choose('en');
+    localStorage.setItem('langData', 'en' );
     setTimeout(() => this.backToWelcome(), 1000);
   }
   presentToast(msg) {

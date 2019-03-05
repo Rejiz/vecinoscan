@@ -2,10 +2,12 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule, HttpClient } from '@angular/common/http'
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
@@ -27,8 +29,12 @@ import { IonicStorageModule } from '@ionic/storage';
 import { HTTP } from '@ionic-native/http';
 import { HeaderColor } from '@ionic-native/header-color';
 import { Badge } from '@ionic-native/badge';
+import { IonicPageModule } from 'ionic-angular';
 
-
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
+}
 @NgModule({
   declarations: [
     MyApp,
@@ -44,11 +50,19 @@ import { Badge } from '@ionic-native/badge';
     LinkyModule, 
     HttpModule,
     HttpClientModule,
+    TranslateModule.forRoot({
+        loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
+        }
+    }),
     FormsModule,
     IonicStorageModule.forRoot({
       name: '__mydb',
          driverOrder: ['indexeddb', 'sqlite', 'websql']
     }),
+    IonicPageModule.forChild(HomePage),
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],

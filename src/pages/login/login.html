@@ -7,15 +7,19 @@
 
 
 <ion-content padding class="getstart">
-  
+  <ion-buttons right>
+    <button ion-button round outline (click)="this.authService.openMenu()">
+      <ion-icon name="globe"></ion-icon>
+    </button>
+  </ion-buttons>
 <ion-list>
 <div class="caption-center">
-  <ion-img width="150px" height="150px" src="../../assets/imgs/qrscan.png"></ion-img>
-  <h1>Bienvenido</h1>
-  <h2>Ingresa tus datos</h2>
+  <ion-img width="150px" height="160px" src="../../assets/imgs/qrscan.png"></ion-img>
+  <h1>{{"welcome" | translate }}</h1>
+  <h2>{{"fill form" | translate }}</h2>
   <ion-item id="rounded">
     <ion-label >  <ion-icon name="contact"></ion-icon> </ion-label>
-    <ion-input type="text" [(ngModel)]="userData.username" placeholder="Usuario" ></ion-input>
+    <ion-input type="text" [(ngModel)]="userData.username" placeholder="{{'user' | translate }}" ></ion-input>
   </ion-item>
 
   <ion-item id="rounded">
@@ -23,7 +27,7 @@
     <ion-input type="password" [(ngModel)]="userData.password" placeholder="************"></ion-input>
   </ion-item>
 
-  <button ion-button round outline color="loginboton" (click)="login()">Ingresar</button>
+  <button ion-button round outline color="loginboton" (click)="login()">{{'Ingresar' | translate}}</button>
 
 </div>
 </ion-list>

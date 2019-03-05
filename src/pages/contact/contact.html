@@ -1,10 +1,13 @@
 <ion-header>
   <ion-navbar>
-    <ion-buttons start>
-      <button ion-button icon-only (click)="getCheckpoints()">
+      <ion-buttons start>
+      <button ion-button icon-only  (click)="getCheckpoints()">
         <ion-icon name="pin"></ion-icon>
       </button>
     </ion-buttons>
+      <ion-title>
+        {{"checklist" | translate}}
+      </ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="updatePage()">
         <ion-icon name="md-refresh"></ion-icon>
@@ -13,9 +16,6 @@
         <ion-icon name="md-send"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>
-      Registros
-    </ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -24,14 +24,14 @@
 
   <ion-card *ngIf="noRecords">
     <ion-item>
-      No existen registros pendientes...
+      <ion-icon name="checkbox"></ion-icon> {{"not-pendding" | translate}}
     </ion-item>
   </ion-card>
      <div *ngIf="hasComics">
         <ion-list>
   
           <ion-list-header>
-            Registros Pendientes
+            <ion-icon name="checkbox"></ion-icon> {{"pendding" | translate}}
           </ion-list-header>
            <ion-item *ngFor="let comic of comics" class="scans" [ngClass]="comic.active == true?'true':'false'">
             <ion-icon *ngIf=" comic.active == true" item-start name="ios-checkmark-circle" color="secondary"></ion-icon>
@@ -48,7 +48,7 @@
       <ion-list *ngIf="hasOnline">
 
         <ion-list-header>
-          Lista de Registros
+          {{"checklist" | translate}}
         </ion-list-header>
          <ion-item *ngFor="let item of dataSet" class="scans true" >
           <ion-icon item-start name="ios-checkmark-circle" color="secondary"></ion-icon>

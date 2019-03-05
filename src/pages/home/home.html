@@ -1,11 +1,16 @@
 <ion-header>
   <ion-navbar>
+      <ion-buttons start>
+          <button ion-button icon-only  (click)="this.authService.openMenu()">
+            <ion-icon name="globe"></ion-icon>
+          </button>
+        </ion-buttons>
+          <ion-title>{{userDetails.name}}</ion-title>
         <ion-buttons end>
           <button ion-button icon-only (click)="logout()">
             <ion-icon name="ios-log-out"></ion-icon>
           </button>
         </ion-buttons>
-        <ion-title>Bienvenido - {{userDetails.name}}</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -15,25 +20,12 @@
         <ion-slide>
             <ion-row>
               <ion-col>
-                <img src="../../assets/images/qr-code.png" width="180px"/>
+                <ion-img width="200px" height="200px" mg src="../../assets/images/qr-code.png"></ion-img>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col>
-                <h1>Captura el Codigo</h1>
-              </ion-col>
-            </ion-row>
-        </ion-slide>
-      
-        <ion-slide>
-            <ion-row>
-              <ion-col>
-                <img src="../../assets/images/directions.png" />
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col>
-                <h1>El registro se envia!</h1>
+                <h1>{{"Scan QR Code" | translate }}</h1>
               </ion-col>
             </ion-row>
         </ion-slide>
@@ -41,12 +33,25 @@
         <ion-slide>
             <ion-row>
               <ion-col>
-                <img src="../../assets/images/lock.png" />
+                <ion-img width="200px" height="200px" src="../../assets/images/directions.png"></ion-img>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col>
-                <h1>Si no cuentas con internet, el registro quedara pendiente</h1>
+                <h1>{{"Sent Scan" | translate }}</h1>
+              </ion-col>
+            </ion-row>
+        </ion-slide>
+      
+        <ion-slide>
+            <ion-row>
+              <ion-col>
+                <ion-img width="200px" height="200px" src="../../assets/images/lock.png"></ion-img>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <h1>{{"Pendding Scan" | translate }}</h1>
               </ion-col>
             </ion-row>
         </ion-slide>
@@ -54,12 +59,12 @@
         <ion-slide>
           <ion-row>
             <ion-col>
-              <img src="../../assets/images/smartphone.png" />
+              <ion-img width="200px" height="200px" src="../../assets/images/smartphone.png"></ion-img>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col>
-              <h1>Al recuperar internet, enviar los registros pendientes.</h1>
+              <h1>{{"Avaliable Scan" | translate }}</h1>
             </ion-col>
           </ion-row>
         </ion-slide>

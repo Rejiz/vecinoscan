@@ -77,4 +77,9 @@
   }
   .tabs-md .tab-button {
     z-index: 9999;
-}
+  }
+  ion-content{
+    background: -webkit-gradient(linear, left top, right top, from(#5F87E7), to(#7ea4ff)) !important;
+    background: linear-gradient(90deg, #5F87E7 0%, #7ea4ff 100%) !important;
+  }
+  .toast-message { background: color($colors, primary) } 

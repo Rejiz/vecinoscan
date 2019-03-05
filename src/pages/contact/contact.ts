@@ -241,7 +241,7 @@ export class ContactPage {
         result => {
           this.resposeData = result;
           if (this.resposeData["feedData"]) {
-            // this.dataSet.unshift(this.resposeData.feedData);
+            this.dataSet.unshift(this.resposeData["feedData"]);
             this.userPostData.feed = "";
 
             //this.updatebox.setFocus();
